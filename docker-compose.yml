@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: ./app  # Path to your Flask app's Dockerfile
+    container_name: flask-app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - flask-network
+
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flask_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - flask-network
+
+networks:
+  flask-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
